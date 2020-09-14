@@ -1,5 +1,25 @@
--cp src/main/haxe
--D analyzer-optimize
 -main Main
--lib stx_core
 --interp
+
+-lib utest
+
+-lib stx_pico
+-lib stx_nano
+-lib stx_om
+-lib stx_query
+-lib stx_ds
+-lib stx_log
+-lib stx_assert
+-lib stx_schema
+-lib stx_arrowlet
+-lib stx_ext 
+-lib stx_fp
+-lib hx3compat
+
+-lib reduct
+
+
+-cp src/main/haxe
+
+-D test=stx_db
+-D analyzer-optimize

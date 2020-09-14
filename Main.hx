@@ -1,10 +1,8 @@
-import stx.db.Package;
+using stx.data.Table;
+using stx.data.Store;
 
 class Main {
 	static function main() {
-		test();
-	}
-	static function test(){
-
+		stx.data.Test.main();
 	}
 }

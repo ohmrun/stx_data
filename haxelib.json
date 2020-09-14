@@ -13,8 +13,16 @@
     "version": "0.0.1",
     "url": "https://example.com",
     "dependencies": {
-        "tink_core": "",
-        "stx_core": ""
+        "tink_core"     : "",
+        "stx_pico"      : "",
+        "stx_nano"      : "",
+        "stx_ds"        : "",
+        "stx_om"        : "",
+        "stx_query"     : "",
+        "stx_log"       : "",
+        "stx_assert"    : "",
+        "stx_schema"    : "",
+        "stx_arrowlet"  : ""
     },
     "classPath": "src/main/haxe"
 }
