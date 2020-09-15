@@ -25,7 +25,7 @@ class BlockChain<K,V>{
   private function get_master():Option<Hash>{
     return __.option(this.head.get("master"));
   }
-  private function get_refs(?hash:Hash):Option<EntryArray<K>>{
+  private function get_refs(?hash:Hash):Option<ArrayOfEntry<K>>{
     return 
       __.option(hash)
         .or(()->get_master())
@@ -47,7 +47,7 @@ class BlockChain<K,V>{
             (entry) -> __.couple(Some(entry.points_to),get_refs(entry.points_to).defv([]))
           )
         ).map(
-            (x:Couple<Option<Hash>,EntryArray<K>>) -> memo.snoc(Some(x))
+            (x:Couple<Option<Hash>,ArrayOfEntry<K>>) -> memo.snoc(Some(x))
         ).defv(memo.snoc(None));
       },
       [__.couple(get_master(),get_refs().defv([]))]

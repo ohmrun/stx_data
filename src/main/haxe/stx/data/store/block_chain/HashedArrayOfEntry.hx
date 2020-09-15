@@ -1,19 +1,19 @@
 package stx.data.store.block_chain;
 
-@:forward abstract HashedArrayOfEntry<K>(Couple<Option<Hash>,EntryArray<K>>) from Couple<Option<Hash>,EntryArray<K>>{
+@:forward abstract HashedArrayOfEntry<K>(Couple<Option<Hash>,ArrayOfEntry<K>>) from Couple<Option<Hash>,ArrayOfEntry<K>>{
   public function new(self) this = self;
   @:noUsing static public function unit<K>():HashedArrayOfEntry<K>{
     return make(None,[]);
   }
-  @:noUsing static public function make<K>(hash:Option<Hash>,array:EntryArray<K>){
+  @:noUsing static public function make<K>(hash:Option<Hash>,array:ArrayOfEntry<K>){
     return new HashedArrayOfEntry(__.couple(hash,array));
   }
   @:noUsing static public function pure<K>(entry:Entry<K>){
-    var arr   = EntryArray.pure(entry);
+    var arr   = ArrayOfEntry.pure(entry);
     var hash  = Helper.hash(arr);
     return make(Some(hash),arr);
   }
-  public function mod(fn:EntryArray<K>->EntryArray<K>):HashedArrayOfEntry<K>{
+  public function mod(fn:ArrayOfEntry<K>->ArrayOfEntry<K>):HashedArrayOfEntry<K>{
     return make(this.fst(),fn(this.snd()));
   }
   public function rehash(){
@@ -23,8 +23,8 @@ package stx.data.store.block_chain;
   private function get_hash():Option<Hash>{
     return this.fst();
   }
-  public var data(get,never):EntryArray<K>;
-  private function get_data():EntryArray<K>{
+  public var data(get,never):ArrayOfEntry<K>;
+  private function get_data():ArrayOfEntry<K>{
     return this.snd();
   }
   public function hashable():Any{
