@@ -1,4 +1,4 @@
-package stx.data.store;
+package stx.data.store.block_chain;
 
 enum StoreValSum<K,V>{
   NData(v:V);
