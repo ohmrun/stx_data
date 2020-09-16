@@ -11,13 +11,13 @@ class BlockChain<K,V>{
   public var head(default,null):SettableStoreApi<String,Hash>;
   public var data(default,null):SettableStoreApi<String,V>;
 
-  public var refs(default,null):StringMapOfArrayOfEntry<K>;
+  public var refs(default,null):SettableStoreApi<String,ArrayOfEntry<K>>;
   
   public function new(deps:BlockChainDeps<K,V>){
     this.serializer           = new Serializer();
     this.serializer.useCache  = true;
     
-    this.refs                 = new StringMapOfArrayOfEntry();
+    this.refs                 = new MemorySettableStoreOfString();
     this.head                 = new MemorySettableStoreOfString();
     this.data                 = new MemorySettableStoreOfString();
 
@@ -35,13 +35,13 @@ class BlockChain<K,V>{
     return 
         Provide.make(hash)
         .or(()->get_master())
-        .exudate(
+        .flat_map(
           (hash:Hash) -> {
             trace('hash: $hash');
-            var refs = this.refs.get(hash);
+            var refs = this.refs.get(hash.prj());
             //$type(refs);
             ///trace(__.option(refs).map( x -> x.show()).defv(null));
-            return __.option(refs);
+            return refs;
           }
         ).or(
           () -> Provide.fromChunk(Val([]))
@@ -75,7 +75,7 @@ class BlockChain<K,V>{
           );
         },
         k,
-        __.logger()(seed)
+        seed
       ).defv(Provide.pure([]))
     );
   }
@@ -99,7 +99,7 @@ class BlockChain<K,V>{
     return this.data.set(vhash.prj(),v).execute(
       Execute.fromFunXExecute(
         () -> obtain(k).command(
-          Command.fromFun1Report(
+          Command.fromFun1Execute(
             (have:Array<Option<HashedArrayOfEntry<K>>>) -> {
               trace('path: ${have.map(x -> x.map(y -> y.show()))}');
               var want        = k.zip(have);
@@ -142,14 +142,17 @@ class BlockChain<K,V>{
               var first = next.fst().get_data();
               trace('________________PUT________________');
 
-              for(x in next.snd()){
-                __.log().trace(x.show());
-                refs.set(x.fst().fudge(),x.snd());
-              }
-              trace('___________________________________');
-              head.set('master',next.snd().head().flat_map( x -> x.fst()).fudge());
-
-              return Report.unit();
+              $type(next.snd());
+              var ex = Execute.sequence(
+                (x:HashedArrayOfEntry<K>) -> {
+                  __.log().trace(x.show());
+                  return refs.set(x.fst().fudge().prj(),x.snd());
+                },
+                next.snd()
+              ).execute(
+                () -> head.set('master',next.snd().head().flat_map( x -> x.fst()).fudge())
+              );              
+              return ex;
             }
           )
         )
