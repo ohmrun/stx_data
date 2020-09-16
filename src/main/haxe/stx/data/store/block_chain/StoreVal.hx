@@ -4,7 +4,7 @@ enum StoreValSum<K,V>{
   NData(v:V);
   NEdge(k:K);
 }
-@:using(stx.data.store.StoreVal.StoreValLift)
+@:using(stx.data.store.block_chain.StoreVal.StoreValLift)
 abstract StoreVal<K,V>(StoreValSum<K,V>) from StoreValSum<K,V> to StoreValSum<K,V>{
   static public var _(default,never) = StoreValLift;
   public function new(self) this = self;

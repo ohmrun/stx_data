@@ -8,36 +8,67 @@ class Test{
 
 class FirstTest extends haxe.unit.TestCase{
   public function test(){
-    var a = Articulation.lift(["a","b","c"]);
-    var b = {
+    var keyI    = Articulation.lift(["a","b","c"]);
+    var keyII   = Articulation.lift(["a","b","d","e"]);
+    var keyIII  = Articulation.lift(["m"]);
+    var valI = {
       value : true
     };
-    var d = {
+    var valII = {
       value : false
     };
+
     var store = new BlockChain(BlockChainDeps.unit());
-    __.log()('OK: $a');
-        store.set(a,b);
-    var c = Articulation.lift(["a","b","d","e"]);
-    __.log()('OK: $c');
-        store.set(c,d);
-    __.log()('GET: $a');
-    var e = store.get(a);
-    trace(e);
-    __.log()('GET: $c');
-
-    __.log()('OK: $a');
-    store.set(a,d);
-    __.log()('GET: $a');
-    var f = store.get(c);
-    var g = store.get(a);
-    __.log()('GET: $c');
-    var h = store.get(c);
-
-    var i = Articulation.lift(["m"]);
-    store.set(i,b);
-    __.log()('GET: $i');
-    var j = store.get(i);
+    __.log()('OK: $keyI _________________________________________1');
+    var _a    = store.set(keyI,valI);
+    var _b    = _a.execute(
+      () -> {
+        __.log()('OK: $keyII __________________________________2');
+        return store.set(keyII,valII);
+      }
+    );
+    $type(_b);
+    var _c    = _b.provide(
+      store.get(keyI).before(
+        ()-> {
+          __.log()('GET: $keyI _____________________________________3');
+        }
+      )
+    );
+    var _d  = _c.command(
+        (chunk) -> {
+          trace(chunk);
+          return Report.unit();
+        }
+    );
+    var _e = _d.execute(
+      () -> store.get(keyII).command((chunk) -> {
+        trace(chunk);
+        return Report.unit();
+      })
+    );
+    var _f = _e.execute(
+      () -> store.set(keyI,valII)
+    ).execute(
+      () -> store.get(keyI).command(
+        x -> trace(x)
+      )
+    );
+    var _g = _f.execute(
+      () -> store.set(keyIII,valI)
+    ).execute(
+      () -> store.get(keyIII).command(
+        (x) -> trace(x)
+      ).execute(
+        () -> store.get(keyI).command(
+          x -> trace(x)
+        )
+      )
+    );
+    _g.environment(
+      () -> {},
+      __.crack
+    ).crunch();
   }
 }
 class TableSchemaTest{
@@ -49,6 +80,7 @@ class TableSchemaTest{
 			[
 				Table.col.make(0,'email',email_type)
 			]
-		);
+    );
+    
   }
 }
