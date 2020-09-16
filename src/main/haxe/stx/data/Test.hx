@@ -1,13 +1,16 @@
 package stx.data;
 
+using stx.ASys;
+
 class Test{
   static public function main(){
+    trace("start");
     __.test([new FirstTest()]); 
   }
 }
 
 class FirstTest extends haxe.unit.TestCase{
-  public function test(){
+  public function _test(){
     var keyI    = Articulation.lift(["a","b","c"]);
     var keyII   = Articulation.lift(["a","b","d","e"]);
     var keyIII  = Articulation.lift(["m"]);
@@ -67,6 +70,28 @@ class FirstTest extends haxe.unit.TestCase{
     );
     _g.environment(
       () -> {},
+      __.crack
+    ).crunch();
+  }
+  function fs_store(){
+    var env = __.asys().local();
+    return new stx.data.store.block_chain.term.FileSystemBlockChain(
+      BlockChainDeps.unit(),
+      env.device,
+      env.device.shell.cwd.pop().forward(env).crack().fudge().down("DATA")
+    );
+  }
+  public function _test_filesystem(){
+    var a = fs_store();
+    a.set(["a","b","C"],"hello").environment(
+      () -> {},
+      __.crack
+    ).crunch();
+  }
+  public function test_get_filesystem(){
+    var a = fs_store();
+    a.get(["a","b","C"]).environment(
+      (x) -> trace(x),
       __.crack
     ).crunch();
   }

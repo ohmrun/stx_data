@@ -8,6 +8,9 @@ package stx.data.store.block_chain;
   public function hashable():Any{
     return this.map( entry -> entry.hashable() );
   }
+  public function serializable():Array<Tup2<K,Hash>>{
+    return this.map(entry -> entry.tup());
+  }
   public function show(){
     var a = this.map( entry -> entry.show() ).join(",");
     return '[$a]';

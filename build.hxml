@@ -1,6 +1,7 @@
 -main Main
 --interp
 
+-lib hx3compat
 -lib utest
 
 -lib stx_pico
@@ -14,7 +15,7 @@
 -lib stx_arrowlet
 -lib stx_ext 
 -lib stx_fp
--lib hx3compat
+-lib stx_asys
 
 -lib reduct
 

@@ -2,7 +2,6 @@ package stx;
 
 import haxe.ds.StringMap;
 import haxe.crypto.Sha1;
-import haxe.Serializer;
 
 using tink.CoreApi;
 
@@ -19,6 +18,7 @@ using stx.Query;
 using stx.Ext;
 using stx.Log;
 using stx.Fp;
+
 
 using stx.Db;
 using stx.data.Store;

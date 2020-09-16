@@ -1,32 +1,37 @@
 package stx.data.store.block_chain;
 
+
 typedef BlockChainDepsDef<K,V> = {
   K : { 
-    hash : K -> String,
-    eq   : K -> K -> Bool
+    hash        : K -> Hash,
+    eq          : K -> K -> Bool,
+    serialize   : K -> String,
+    unserialize : String -> K
   },
   V : { 
-    hash : V -> String
+    hash        : V -> Hash,
+    serialize   : V -> String,
+    unserialize : String -> V
   }
 };
 @:forward abstract BlockChainDeps<K,V>(BlockChainDepsDef<K,V>) from BlockChainDepsDef<K,V>{
   public function new(self) this = self;
   static public function form<K,V>():BlockChainDepsDef<K,V>{
-    var serializer = new Serializer();
-        serializer.useCache = true;
     return {
       K : {
         hash : (k:K) -> {
-          serializer.serialize(k);
-          return Sha1.encode(serializer.toString());
+          return new Hash(Sha1.encode(Serialize.encode(k)));
         },
-        eq : (l,r) -> l == r
-      },
+        eq : (l,r)                    -> l == r,
+        serialize : (k:K)             -> Serialize.encode(k),
+        unserialize : (string:String) -> Serialize.decode(string)
+      }, 
       V : {
         hash : (v:V) -> {
-          serializer.serialize(v);
-          return Sha1.encode(serializer.toString());
-        }
+          return new Hash(Sha1.encode(Serialize.encode(v)));
+        },
+        serialize : (v:V)             -> Serialize.encode(v),
+        unserialize : (string:String) -> Serialize.decode(string)
       }
     };
   }
