@@ -21,5 +21,7 @@ using stx.Fp;
 
 
 using stx.Db;
+using stx.db.Log;
+
 using stx.data.Store;
 using stx.data.Test;

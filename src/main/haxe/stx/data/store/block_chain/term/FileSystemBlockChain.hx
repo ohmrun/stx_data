@@ -9,12 +9,11 @@ class FileSystemBlockChain<K,V> extends BlockChain<K,V>{
   public var device(default,null):Device;
   public var directory(default,null):Directory;
 
-  public function new(deps,device,directory){
-    super(deps);
-    
+  public function new(deps:BlockChainDeps<K,V>,device,directory){
     this.device     = device;
     this.directory  = directory;
-    this.head       = new SyncFileSystemSettableStoreOfString({
+
+    var head       = new SyncFileSystemSettableStoreOfString({
       V : {
         serialize   : (hash:Hash)   -> {
           return Serialize.encode(hash.prj());
@@ -25,14 +24,14 @@ class FileSystemBlockChain<K,V> extends BlockChain<K,V>{
         hash        : (hash:Hash)   -> hash
       }
     },device,directory.down("head"));
-    this.data       = new SyncFileSystemSettableStoreOfString({
+    var data       = new SyncFileSystemSettableStoreOfString({
       V : {
         serialize   : (data:V)      -> deps.V.serialize(data),
         unserialize : (str:String)  -> deps.V.unserialize(str),
         hash        : deps.V.hash
       }
     },device,directory.down("data"));
-    this.refs       = new SyncFileSystemSettableStoreOfString({
+    var refs       = new SyncFileSystemSettableStoreOfString({
       V : {
         serialize   : (arr:ArrayOfEntry<K>)            -> {
           var data    = arr.serializable();
@@ -54,5 +53,7 @@ class FileSystemBlockChain<K,V> extends BlockChain<K,V>{
         hash        : (v:ArrayOfEntry<K>)               -> Helper.hash(v)
       }
     },device,directory.down("refs"));
+
+    super(deps,head,data,refs);
   }
 }

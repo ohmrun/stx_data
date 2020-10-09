@@ -19,10 +19,11 @@
         "stx_ds"        : "",
         "stx_om"        : "",
         "stx_query"     : "",
-        "stx_log"       : "",
+        "stx_log"       : "0.1.4",
         "stx_assert"    : "",
         "stx_schema"    : "",
-        "stx_arrowlet"  : ""
+        "stx_arw"  : "",
+        "stx_asys"      : ""
     },
     "classPath": "src/main/haxe"
 }

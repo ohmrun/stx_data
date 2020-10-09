@@ -36,24 +36,24 @@ class SyncFileSystemSettableStoreOfString<V> implements stx.data.store.SettableS
     File.saveContent(path,data);
     return Execute.unit();
   }
-  public function get(k:String):Provide<V,DbFailure>{
+  public function get(k:String):Propose<V,DbFailure>{
     var path          = this.directory.entry(k).canonical(this.device.sep);
     return if(!FileSystem.exists(path)){
-      Provide.fromChunk(Tap);
+      Propose.fromChunk(Tap);
     }else{
       var content       = File.getContent(path);
       //trace(content);
       var reconstructed = deps.V.unserialize(content);
       //trace(reconstructed);
-      Provide.pure(reconstructed);
+      Propose.pure(reconstructed);
     } 
   }
-  public function has(k:String):Proceed<Bool,DbFailure>{
+  public function has(k:String):Produce<Bool,DbFailure>{
     var out = FileSystem.exists(this.directory.entry(k).canonical(this.device.sep));
-    return Proceed.pure(out);
+    return Produce.pure(out);
   }
-  public function itr():Proceed<Array<String>,DbFailure>{
+  public function itr():Produce<Array<String>,DbFailure>{
     var paths = FileSystem.readDirectory(this.directory.canonical(this.device.sep));
-    return Proceed.pure(paths);
+    return Produce.pure(paths);
   }
 }

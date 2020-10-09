@@ -1,6 +1,9 @@
 package stx.data.store;
 
 class Serialize{
+  /**
+    I don't trust reuse with the internal state, soz.
+  **/
   static public function encode<T>(v:T):String{
     var serializer          = new haxe.Serializer();
         serializer.useCache = true;

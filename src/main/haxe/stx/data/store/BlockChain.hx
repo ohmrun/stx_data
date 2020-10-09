@@ -1,10 +1,16 @@
 package stx.data.store;
 
+import stx.data.store.block_chain.term.MemoryBlockChain;
 import stx.data.store.settable_store.*;
 import stx.data.store.block_chain.*;
 
 class BlockChain<K,V>{
-
+  static public function Memory<K,V>(deps):BlockChain<K,V>{
+    return new MemoryBlockChain(deps);
+  }
+  static public function FileSystem<K,V>(deps,device,directory):BlockChain<K,V>{
+    return new FileSystemBlockChain(deps,device,directory);
+  }
   public var deps(default,null):BlockChainDeps<K,V>;
   
   public var head(default,null):SettableStoreApi<String,Hash>;
@@ -12,15 +18,21 @@ class BlockChain<K,V>{
 
   public var refs(default,null):SettableStoreApi<String,ArrayOfEntry<K>>;
   
-  public function new(deps:BlockChainDeps<K,V>){
+  public function new(
+    deps:BlockChainDeps<K,V>,
+    head:SettableStoreApi<String,Hash>,
+    data:SettableStoreApi<String,V>,
+    refs:SettableStoreApi<String,ArrayOfEntry<K>>
+  ){
     
-    this.refs                 = new MemorySettableStoreOfString();
-    this.head                 = new MemorySettableStoreOfString();
-    this.data                 = new MemorySettableStoreOfString();
-
     this.deps                 = deps;
+
+    this.head                 = head;
+    this.data                 = data;
+    this.refs                 = refs;
+    
   }
-  private function get_master():Provide<Hash,DbFailure>{
+  private function get_master():Propose<Hash,DbFailure>{
     var out = this.head.get("master").postfix(
       __.passthrough(
         (x:Hash) -> {}//trace('get_master: $x')
@@ -28,54 +40,54 @@ class BlockChain<K,V>{
     );
     return out;
   }
-  private function get_refs(?hash:Hash):Provide<ArrayOfEntry<K>,DbFailure>{
+  private function get_refs(?hash:Hash):Propose<ArrayOfEntry<K>,DbFailure>{
     return 
-        Provide.make(hash)
+        Propose.make(hash)
         .or(()->get_master())
         .flat_map(
           (hash:Hash) -> {
-            //trace('hash: $hash');
+            __.log().trace('hash: $hash');
             var refs = this.refs.get(hash.prj());
             //$type(refs);
             ///trace(__.option(refs).map( x -> x.show()).defv(null));
             return refs;
           }
         ).or(
-          () -> Provide.fromChunk(Val([]))
+          () -> Propose.fromChunk(Val([]))
         ).after(
-          (x) -> {}
+          (x) -> {__.log()(x.map(_ -> _.toString()));}
         );
   }
-  private function obtain(k:Articulation<K>):Provide<Array<Option<HashedArrayOfEntry<K>>>,DbFailure>{
-    //trace('OBTAIN');
-    return get_refs().materialise().and(get_master().materialise()).process(
+  private function obtain(k:Articulation<K>):Propose<Array<Option<HashedArrayOfEntry<K>>>,DbFailure>{
+    ///trace('OBTAIN ${k.length}');
+    return get_refs().materialise().and(get_master().materialise()).convert(
       (couple:Couple<Option<ArrayOfEntry<K>>,Option<Hash>>)-> {
-        //trace(couple.fst().defv([]));
+        __.log().trace(couple.fst().defv([]));
         return [Some(HashedArrayOfEntry.make(couple.snd(),couple.fst().defv([])))];
       }
     ).flat_map(
-      (seed:Array<Option<HashedArrayOfEntry<K>>>) -> Provide.bind_fold(
+      (seed:Array<Option<HashedArrayOfEntry<K>>>) -> Propose.bind_fold(
         (key:K,memo:Array<Option<HashedArrayOfEntry<K>>>) -> {
           var last = memo.last().flat_map(x -> x);
           //trace(last.map(x -> x.tup()));
-          return Provide.fromOption(last).flat_map(
+          return Propose.fromOption(last).flat_map(
             (ent:HashedArrayOfEntry<K>) -> {
               //trace(ent);
-              return Provide.fromOption(ent.snd().search((entry) -> entry.key == key)).flat_map(
-                (entry:Entry<K>) -> get_refs(entry.points_to).exudate(
-                  Exudate.fromOptionIR((refs:Option<ArrayOfEntry<K>>) -> __.couple(Some(entry.points_to),refs.defv(ArrayOfEntry.unit())))
+              return Propose.fromOption(ent.snd().search((entry) -> entry.key == key)).flat_map(
+                (entry:Entry<K>) -> get_refs(entry.points_to).diffuse(
+                  Diffuse.fromOptionIR((refs:Option<ArrayOfEntry<K>>) -> __.couple(Some(entry.points_to),refs.defv(ArrayOfEntry.unit())))
                 )
               );
             }
-          ).exudate(
-              Exudate.fromOptionIR(
+          ).diffuse(
+              Diffuse.fromOptionIR(
                 (opt:Option<Couple<Option<Hash>,ArrayOfEntry<K>>>) -> memo.snoc(opt)
               )
           );
         },
         k,
         seed
-      ).defv(Provide.pure([]))
+      ).defv(Propose.pure([]))
     );
   }
   /**
@@ -100,7 +112,7 @@ class BlockChain<K,V>{
         () -> obtain(k).command(
           Command.fromFun1Execute(
             (have:Array<Option<HashedArrayOfEntry<K>>>) -> {
-              //trace('path: ${have.map(x -> x.map(y -> y.show()))}');
+              __.log().trace('path: ${have.map(x -> x.map(y -> y.show()))}');
               var want        = k.zip(have);
               //trace("__");
               var next        = want.rfold(
@@ -158,7 +170,7 @@ class BlockChain<K,V>{
       )
     );
   } 
-  public function get(k:Articulation<K>):Provide<V,DbFailure>{
+  public function get(k:Articulation<K>):Propose<V,DbFailure>{
     //trace('???????????$k?????????????');
     return obtain(k).flat_map(
       (ls) -> {
@@ -167,18 +179,18 @@ class BlockChain<K,V>{
         //}
         var opt = ls.last().flat_map(x -> x).flat_map(x -> x.fst()).flat_map(
           (hash) -> data.get(hash.prj())
-        ).defv(Provide.unit());
+        ).defv(Propose.unit());
         //$type(opt);
         return opt;
       }
     );
   }
-  public function has(k:Articulation<K>):Proceed<Bool,DbFailure>{
+  public function has(k:Articulation<K>):Produce<Bool,DbFailure>{
     return null;
   }
   @:note("seems a bit heavy")
-  public function itr():Proceed<Array<Articulation<K>>,DbFailure>{
-    return Proceed.fromErr(__.fault().of(E_Db_Unimplemented));
+  public function itr():Produce<Array<Articulation<K>>,DbFailure>{
+    return Produce.fromErr(__.fault().of(E_Db_Unimplemented));
   }
 }
 class BlockChainHelp{

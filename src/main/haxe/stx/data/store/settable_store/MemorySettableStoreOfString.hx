@@ -10,21 +10,21 @@ class MemorySettableStoreOfString<V> implements stx.data.store.SettableStoreApi<
     this.delegate.set(k,v);
     return Execute.unit();
   }
-  public function get(k:String):Provide<V,DbFailure>{
+  public function get(k:String):Propose<V,DbFailure>{
     var result = __.chunk(this.delegate.get(k));
-    return Provide.fromChunk(result);
+    return Propose.fromChunk(result);
   }
-  public function has(k:String):Proceed<Bool,DbFailure>{
+  public function has(k:String):Produce<Bool,DbFailure>{
     var result = this.delegate.exists(k);
-    return Proceed.pure(result);
+    return Produce.pure(result);
   }
 
-  public function itr():Proceed<Array<String>,DbFailure>{
+  public function itr():Produce<Array<String>,DbFailure>{
     var arr = [];
     for(key in this.delegate.keys()){
       arr.push(key);
     }
-    return Proceed.pure(arr);
+    return Produce.pure(arr);
   }
 
 }

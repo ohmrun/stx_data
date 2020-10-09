@@ -1,7 +1,9 @@
 package stx.data;
 
+
 using stx.ASys;
 
+#if (test=="stx_db")
 class Test{
   static public function main(){
     trace("start");
@@ -21,7 +23,7 @@ class FirstTest extends haxe.unit.TestCase{
       value : false
     };
 
-    var store = new BlockChain(BlockChainDeps.unit());
+    var store = BlockChain.Memory(BlockChainDeps.unit());
     __.log()('OK: $keyI _________________________________________1');
     var _a    = store.set(keyI,valI);
     var _b    = _a.execute(
@@ -31,12 +33,12 @@ class FirstTest extends haxe.unit.TestCase{
       }
     );
     $type(_b);
-    var _c    = _b.provide(
-      store.get(keyI).before(
+    var _c    = _b.propose(
+      $type(store.get(keyI).before(
         ()-> {
           __.log()('GET: $keyI _____________________________________3');
         }
-      )
+      ))
     );
     var _d  = _c.command(
         (chunk) -> {
@@ -78,10 +80,11 @@ class FirstTest extends haxe.unit.TestCase{
     return new stx.data.store.block_chain.term.FileSystemBlockChain(
       BlockChainDeps.unit(),
       env.device,
-      env.device.shell.cwd.pop().forward(env).crack().fudge().down("DATA")
+      env.device.shell.cwd.pop().provide(env).crack().fudge().down("DATA")
     );
   }
-  public function _test_filesystem(){
+  public function test_filesystem(){
+    __.log().trace("test filesystem");
     var a = fs_store();
     a.set(["a","b","C"],"hello").environment(
       () -> {},
@@ -89,6 +92,7 @@ class FirstTest extends haxe.unit.TestCase{
     ).crunch();
   }
   public function test_get_filesystem(){
+    __.log().trace("test get filesystem");
     var a = fs_store();
     a.get(["a","b","C"]).environment(
       (x) -> trace(x),
@@ -109,3 +113,4 @@ class TableSchemaTest{
     
   }
 }
+#end
