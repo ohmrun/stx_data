@@ -10,12 +10,11 @@ using stx.fail.DbFailure;
 using stx.Pico;
 using stx.Nano;
 using stx.Ds;
-using stx.Schema;
+using stx.Fn;
 using stx.om.Spine;
 using stx.om.Signature;
-using stx.Arw;
+using eu.ohmrun.Fletcher;
 using stx.Query;
-using stx.Ext;
 using stx.Log;
 using stx.Fp;
 

@@ -1,6 +1,6 @@
 package stx.data.core;
 
-enum Mutablitity{
+enum Mutability{
   Read;
   ReadEdit;
 }

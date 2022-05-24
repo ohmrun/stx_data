@@ -1,7 +1,7 @@
 package stx.data.store.block_chain;
 
 @:forward abstract Entry<K>(Couple<K,Hash>){
-  static public function make<K>(k:K,v:Hash):Entry<K>{
+  @:noUsing static public function make<K>(k:K,v:Hash):Entry<K>{
     return new Entry(__.couple(k,v));
   }
   public function new(self) this = self;

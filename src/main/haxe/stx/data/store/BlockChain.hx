@@ -1,5 +1,6 @@
 package stx.data.store;
 
+import stx.data.store.block_chain.Entry;
 import stx.data.store.block_chain.term.MemoryBlockChain;
 import stx.data.store.settable_store.*;
 import stx.data.store.block_chain.*;
@@ -33,10 +34,8 @@ class BlockChain<K,V>{
     
   }
   private function get_master():Propose<Hash,DbFailure>{
-    var out = this.head.get("master").postfix(
-      __.passthrough(
-        (x:Hash) -> {}//trace('get_master: $x')
-      )
+    var out = this.head.get("master").map(
+      ((x:Hash) -> {}).fn().promote()
     );
     return out;
   }
@@ -55,14 +54,14 @@ class BlockChain<K,V>{
         ).or(
           () -> Propose.fromChunk(Val([]))
         ).after(
-          (x) -> {__.log()(x.map(_ -> _.toString()));}
+          (x) -> {__.log().debug(_ -> _.pure(x.map(_ -> _.toString())));}
         );
   }
   private function obtain(k:Articulation<K>):Propose<Array<Option<HashedArrayOfEntry<K>>>,DbFailure>{
     ///trace('OBTAIN ${k.length}');
     return get_refs().materialise().and(get_master().materialise()).convert(
       (couple:Couple<Option<ArrayOfEntry<K>>,Option<Hash>>)-> {
-        __.log().trace(couple.fst().defv([]));
+        __.log().trace(_ -> _.pure(couple.fst().defv([])));
         return [Some(HashedArrayOfEntry.make(couple.snd(),couple.fst().defv([])))];
       }
     ).flat_map(
@@ -150,7 +149,7 @@ class BlockChain<K,V>{
                 },
                 __.couple(Left(vhash),[])
               );
-              var first = next.fst().get_data();
+              //var first = next.fst().either().get_data();
               //trace('________________PUT________________');
 
               //$type(next.snd());
@@ -190,7 +189,7 @@ class BlockChain<K,V>{
   }
   @:note("seems a bit heavy")
   public function itr():Produce<Array<Articulation<K>>,DbFailure>{
-    return Produce.fromErr(__.fault().of(E_Db_Unimplemented));
+    return Produce.fromRefuse(__.fault().of(E_Db_Unimplemented));
   }
 }
 class BlockChainHelp{

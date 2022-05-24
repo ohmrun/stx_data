@@ -1,5 +1,7 @@
 package stx.data.store.block_chain;
 
+import stx.data.store.block_chain.Entry;
+
 @:forward abstract ArrayOfEntry<K>(Array<Entry<K>>) from Array<Entry<K>> to Array<Entry<K>>{
 
   static public function unit<K>():ArrayOfEntry<K>{return new ArrayOfEntry([]);}

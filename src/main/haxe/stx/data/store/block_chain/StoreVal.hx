@@ -8,7 +8,7 @@ enum StoreValSum<K,V>{
 abstract StoreVal<K,V>(StoreValSum<K,V>) from StoreValSum<K,V> to StoreValSum<K,V>{
   static public var _(default,never) = StoreValLift;
   public function new(self) this = self;
-  static public function lift<K,V>(self:StoreValSum<K,V>):StoreVal<K,V> return new StoreVal(self);
+  @:noUsing static public function lift<K,V>(self:StoreValSum<K,V>):StoreVal<K,V> return new StoreVal(self);
   
   
 

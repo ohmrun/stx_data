@@ -1,7 +1,7 @@
 package stx.data.store.block_chain;
 
 @:forward abstract HashedStoreVal<K,V>(Couple<Hash,StoreVal<K,V>>){
-  static public function make(hash,node){
+  @:noUsing static public function make(hash,node){
     return new HashedStoreVal(__.couple(hash,node));
   }
   public function new(self) this = self;

@@ -4,7 +4,7 @@ using stx.fs.Path;
 
 import sys.io.File;
 import sys.FileSystem;
-import stx.asys.pack.Device;
+import stx.asys.Device;
 import stx.data.store.block_chain.Hash;
 
 class SyncFileSystemSettableStoreOfString<V> implements stx.data.store.SettableStoreApi<String,V>{

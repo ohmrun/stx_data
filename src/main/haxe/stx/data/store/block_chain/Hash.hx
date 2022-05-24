@@ -9,6 +9,6 @@ package stx.data.store.block_chain;
   private function prj():String return this;
 
   public function truncate(int){
-    return this.toChars().truncate(int);
+    return Chars.lift(this).truncate(int);
   }
 }

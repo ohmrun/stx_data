@@ -1,0 +1,18 @@
+{
+  "build" : {
+    "-D" : ["no-deprecation-warnings"],
+    "-cp" : "src/main/haxe", 
+    "-lib" : [
+      "hx3compat",
+      
+      "stx_pico","stx_nano","stx_om","stx_ds","stx_log","stx_assert","stx_fp","stx_db","stx_asys",
+      
+      "pml" 
+    ],
+    "unit" : {
+      "--macro" : [
+        "include('stx.data',true)"
+      ]
+    }
+  }
+}

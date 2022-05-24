@@ -1,5 +1,8 @@
 package stx.data;
 
+enum TableFailure{
+
+}
 class Table{
   static public var type(default,null)  	= {
 		make : TableDataType.make
@@ -36,27 +39,27 @@ typedef TableDataTypeDef = {
 	private function get_self():TableDataType return lift(this);
 }
 enum TableDataKindSum{
-	DDK_Prim(v:PrimitiveKindSum);
-	DDK_Link(v:TableForeignKey);
+	TDK_Prim(v:PrimitiveKindSum);
+	TDK_Link(v:TableForeignKey);
 }
 @:forward abstract TableDataKind(TableDataKindSum) from TableDataKindSum to TableDataKindSum{
 	public function new(self) this = self;
-	static public function lift(self:TableDataKindSum):TableDataKind 	return new TableDataKind(self);
+	@:noUsing static public function lift(self:TableDataKindSum):TableDataKind 	return new TableDataKind(self);
 
-	@:noUsing static public function TBoolean():TableDataKind 				return DDK_Prim(PrimitiveKindSum.TBoolean);
-	@:noUsing static public function bool():TableDataKind 						return DDK_Prim(PrimitiveKindSum.TBoolean);
+	@:noUsing static public function TBoolean():TableDataKind 				return TDK_Prim(PrimitiveKindSum.TBoolean);
+	@:noUsing static public function bool():TableDataKind 						return TDK_Prim(PrimitiveKindSum.TBoolean);
 
-	@:noUsing static public function TInteger():TableDataKind 				return DDK_Prim(PrimitiveKindSum.TInteger);
-	@:noUsing static public function int():TableDataKind 							return DDK_Prim(PrimitiveKindSum.TInteger);
+	@:noUsing static public function TInteger():TableDataKind 				return TDK_Prim(PrimitiveKindSum.TInteger);
+	@:noUsing static public function int():TableDataKind 							return TDK_Prim(PrimitiveKindSum.TInteger);
 	
-	@:noUsing static public function TFloatingPoint():TableDataKind 	return DDK_Prim(PrimitiveKindSum.TFloatingPoint);
-	@:noUsing static public function float():TableDataKind 						return DDK_Prim(PrimitiveKindSum.TFloatingPoint);
+	@:noUsing static public function TFloatingPoint():TableDataKind 	return TDK_Prim(PrimitiveKindSum.TFloatingPoint);
+	@:noUsing static public function float():TableDataKind 						return TDK_Prim(PrimitiveKindSum.TFloatingPoint);
 
-	@:noUsing static public function TCharacters():TableDataKind 			return DDK_Prim(PrimitiveKindSum.TCharacters);
-	@:noUsing static public function chars():TableDataKind 						return DDK_Prim(PrimitiveKindSum.TCharacters);
+	@:noUsing static public function TCharacters():TableDataKind 			return TDK_Prim(PrimitiveKindSum.TCharacters);
+	@:noUsing static public function chars():TableDataKind 						return TDK_Prim(PrimitiveKindSum.TCharacters);
 
-	@:noUsing static public function TUntypedUnknown():TableDataKind 	return DDK_Prim(PrimitiveKindSum.TUntypedUnknown);
-	@:noUsing static public function blob():TableDataKind 						return DDK_Prim(PrimitiveKindSum.TUntypedUnknown);
+	@:noUsing static public function TUntypedUnknown():TableDataKind 	return TDK_Prim(PrimitiveKindSum.TUntypedUnknown);
+	@:noUsing static public function blob():TableDataKind 						return TDK_Prim(PrimitiveKindSum.TUntypedUnknown);
 	
 
 	public function prj():TableDataKindSum return this;
@@ -91,7 +94,7 @@ typedef TableSchemaDef = {
 @:forward abstract TableSchema(TableSchemaDef) from TableSchemaDef to TableSchemaDef{
 	public function new(self) this = self;
 	@:noUsing static public function lift(self:TableSchemaDef):TableSchema return new TableSchema(self);
-	static public function make(name:String,fields:Array<ColumnDefinition>){
+	@:noUsing static public function make(name:String,fields:Array<ColumnDefinition>){
 		return { name : name,  fields : fields };
 	}
 	
@@ -133,4 +136,20 @@ interface TableEditApi{
 	public function insert(before:Int = -1,data:ReadRow):Execute<DbFailure>;
 	public function update(index:Int,data:ReadRow):Execute<DbFailure>;
 	public function delete(index:Int):Execute<DbFailure>;
+}
+typedef TableSchemataDef = Array<TableDataType>;
+abstract TableSchemata(TableSchemataDef) from TableSchemataDef to TableSchemataDef{
+	@:noUsing static public function lift<T>(self:TableSchemataDef) return new TableSchemata(self);
+	public function new(self:TableSchemataDef) this = self;
+}
+class SignatureLift{
+	// static public function validate<T>(self:Signature<T>,schemata:TableSchemata,inner:T->Report<TableFailure>){
+	// 	return switch [self.prj()] {
+	// 	case SigCollate(arr)	:
+	// 		case SigPrimate(s)		:
+	// 		case SigCollect(fn)		:
+	// 		case SigPredate(v)		:
+	// 		case SigUnknown				:
+	// 	}
+	// }	
 }

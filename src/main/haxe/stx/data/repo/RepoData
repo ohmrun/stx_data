@@ -1,0 +1,40 @@
+package stx.data.repo;
+
+@:publicFields typedef RepoDataDef<Insert_T,Update_T,Issued_T,Index_T> = {
+  final insert : RepoInsertDef<Insert_T>;
+  final update : RepoUpdateDef<Insert_T,Update_T,Index_T>;
+  final issued : RepoIssuedPrimaryDef<Issued_T,Index_T>;
+}
+interface RepoDataApi<Insert_T,Update_T,Issued_T,Index_T>{
+  final insert : RepoInsert<Insert_T>;
+  final update : RepoUpdate<Insert_T,Update_T,Index_T>;
+  final issued : RepoIssuedPrimary<Issued_T,Index_T>;
+}
+@:forward abstract RepoData<Insert_T,Update_T,Issued_T,Index_T>(RepoDataApi<Insert_T,Update_T,Issued_T,Index_T>) from RepoDataApi<Insert_T,Update_T,Issued_T,Index_T> to RepoDataApi<Insert_T,Update_T,Issued_T,Index_T>{
+  public function new(self:RepoDataApi<Insert_T,Update_T,Issued_T,Index_T>){
+    this = self;
+  }
+  static public function unto<Insert_T,Update_T,Issued_T,Index_T>(self:RepoData<Insert_T,Update_T,Issued_T,Index_T>){
+    return new RepoData(self);
+  }
+  @:noUsing static public function make<Insert_T,Update_T,Issued_T,Index_T>(insert,update,issued):RepoData<Insert_T,Update_T,Issued_T,Index_T>{
+    return unto(({
+      insert : insert,
+      update : update,
+      issued : issued
+    }:RepoDataCls<Insert_T,Update_T,Issued_T,Index_T>));
+  }
+  @:noUsing static public function make0<Insert_T,Update_T,Issued_T,Index_T>(insert_secure:Dyn->Insert_T,update_lookup:Update_T->Index_T,update_harden:Update_T->Insert_T,issued_lookup:Issued_T->Index_T,issued_secure:Dyn->Issued_T){
+    return make(insert_secure,tuple2(update_lookup,update_harden),tuple2(issued_lookup,issued_secure));
+  }
+}
+@:structInit class RepoDataCls<Insert_T,Update_T,Issued_T,Index_T> implements RepoDataApi<Insert_T,Update_T,Issued_T,Index_T>{
+  public function new(insert,update,issued){
+    this.insert = insert;
+    this.update = update;
+    this.issued = issued;
+  }
+  public final insert : RepoInsert<Insert_T>;
+  public final update : RepoUpdate<Insert_T,Update_T,Index_T>;
+  public final issued : RepoIssuedPrimary<Issued_T,Index_T>;
+}

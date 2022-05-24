@@ -4,7 +4,7 @@ typedef ArticulationDef<K> = Array<K>;
 
 @:forward abstract Articulation<K>(ArticulationDef<K>) from ArticulationDef<K> to ArticulationDef<K>{
   public function new(self) this = self;
-  static public function lift<K>(self:ArticulationDef<K>):Articulation<K> return new Articulation(self);
+  @:noUsing static public function lift<K>(self:ArticulationDef<K>):Articulation<K> return new Articulation(self);
   
   public function last():Option<K>{
     return this.last();

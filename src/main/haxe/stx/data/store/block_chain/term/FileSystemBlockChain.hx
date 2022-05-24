@@ -1,7 +1,7 @@
 package stx.data.store.block_chain.term;
 
 using stx.fs.Path;
-using stx.asys.pack.Device;
+using stx.asys.Device;
 
 import stx.data.store.settable_store.SyncFileSystemSettableStoreOfString;
 

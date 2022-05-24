@@ -1,10 +1,11 @@
 package stx.db;
 
-@:callable @:forward abstract Log(stx.Log){
+using stx.Nano;
+using stx.Log;
+using stx.Pkg;
+
+class Logging{
   static public function log(wildcard:Wildcard){
-    return new stx.db.Log();
-  }
-  public function new(){
-    this = stx.Log.ZERO.tag("stx.db");
+    return stx.Log.pkg(__.pkg());
   }
 }
