@@ -1,7 +1,5 @@
 package stx.data;
 
-
-
 @:publicFields typedef RepoLookupDef<T,I> = {
   final lookup : (t:T) -> I;
 }

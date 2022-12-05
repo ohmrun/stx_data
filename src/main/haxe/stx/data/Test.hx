@@ -5,7 +5,7 @@ package stx.data;
 class Test{
   static public function main(){
     trace("start");
-    __.test([new TableSchemaTest()]);
+    __.test().run([new TableSchemaTest()]);
   }
 }
 class TableSchemaTest extends haxe.unit.TestCase{

@@ -1,15 +1,15 @@
 {
-    "name": "stx_db",
+    "name": "stx_data",
     "license": "MIT",
     "tags": [
         "cross",
         "functional"
     ],
-    "description": "Functional composition tools. Haxe 3.1.* required.",
+    "description": "",
     "contributors": [
         "0b1kn00b"
     ],
-    "releasenote": "Wow, can post past version. oops",
+    "releasenote": "",
     "version": "0.0.1",
     "url": "https://example.com",
     "dependencies": {
