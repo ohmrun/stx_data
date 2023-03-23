@@ -1,7 +1,5 @@
 package stx.data;
 
-
-#if (test=="stx_db")
 class Test{
   static public function main(){
     trace("start");
@@ -21,4 +19,3 @@ class TableSchemaTest extends haxe.unit.TestCase{
     trace(user_type);
   }
 }
-#end

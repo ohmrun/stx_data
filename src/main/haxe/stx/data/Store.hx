@@ -1,6 +1,5 @@
 package stx.data;
 
-using stx.data.Test;
 
 typedef Serialize                               = stx.data.store.Serialize;
 typedef ReadableStoreApi<K,V>                   = stx.data.store.ReadableStoreApi<K,V>;

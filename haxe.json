@@ -12,6 +12,10 @@
         "include('stx.data',true)",
         "include('stx.assert',true)"
       ]
+    },
+    "test"  : {
+      "-cp" : "src/test/haxe",
+      "-L"  : ["stx_test"]
     }
   }
 }
