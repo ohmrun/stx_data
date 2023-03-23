@@ -1,3 +1,3 @@
-package stx.assert;
+package stx.assert.data;
 
 using stx.Assert;

@@ -40,4 +40,7 @@ class Triplet<Pi,Pii,Piii> implements ComparableApi<TTriplet<Pi,Pii,Piii>>{
       }
     );
   }
+  public function toComparable(){
+    return this;
+  }
 }

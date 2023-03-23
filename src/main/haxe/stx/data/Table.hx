@@ -46,20 +46,20 @@ enum TableDataKindSum{
 	public function new(self) this = self;
 	@:noUsing static public function lift(self:TableDataKindSum):TableDataKind 	return new TableDataKind(self);
 
-	@:noUsing static public function TBoolean():TableDataKind 				return TDK_Prim(PrimitiveTypeSum.TBoolean);
-	@:noUsing static public function bool():TableDataKind 						return TDK_Prim(PrimitiveTypeSum.TBoolean);
+	@:noUsing static public function PTBool():TableDataKind 					return TDK_Prim(PrimitiveTypeSum.PTBool);
+	@:noUsing static public function bool():TableDataKind 						return TDK_Prim(PrimitiveTypeSum.PTBool);
 
-	@:noUsing static public function TInteger():TableDataKind 				return TDK_Prim(PrimitiveTypeSum.TInteger);
-	@:noUsing static public function int():TableDataKind 							return TDK_Prim(PrimitiveTypeSum.TInteger);
+	@:noUsing static public function PTInt():TableDataKind 						return TDK_Prim(PrimitiveTypeSum.PTInt);
+	@:noUsing static public function int():TableDataKind 							return TDK_Prim(PrimitiveTypeSum.PTInt);
 	
-	@:noUsing static public function TFloatingPoint():TableDataKind 	return TDK_Prim(PrimitiveTypeSum.TFloatingPoint);
-	@:noUsing static public function float():TableDataKind 						return TDK_Prim(PrimitiveTypeSum.TFloatingPoint);
+	@:noUsing static public function PTFloat():TableDataKind 					return TDK_Prim(PrimitiveTypeSum.PTFloat);
+	@:noUsing static public function float():TableDataKind 						return TDK_Prim(PrimitiveTypeSum.PTFloat);
 
-	@:noUsing static public function TCharacters():TableDataKind 			return TDK_Prim(PrimitiveTypeSum.TCharacters);
-	@:noUsing static public function chars():TableDataKind 						return TDK_Prim(PrimitiveTypeSum.TCharacters);
+	@:noUsing static public function PTText():TableDataKind 					return TDK_Prim(PrimitiveTypeSum.PTText);
+	@:noUsing static public function chars():TableDataKind 						return TDK_Prim(PrimitiveTypeSum.PTText);
 
-	@:noUsing static public function TUntypedUnknown():TableDataKind 	return TDK_Prim(PrimitiveTypeSum.TUntypedUnknown);
-	@:noUsing static public function blob():TableDataKind 						return TDK_Prim(PrimitiveTypeSum.TUntypedUnknown);
+	@:noUsing static public function PTBlob():TableDataKind 					return TDK_Prim(PrimitiveTypeSum.PTBlob);
+	@:noUsing static public function blob():TableDataKind 						return TDK_Prim(PrimitiveTypeSum.PTBlob);
 	
 
 	public function prj():TableDataKindSum return this;
