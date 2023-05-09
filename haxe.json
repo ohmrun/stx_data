@@ -11,7 +11,10 @@
       "--macro" : [
         "include('stx.data',true)",
         "include('stx.assert',true)"
-      ]
+      ],
+      "javascript" : {
+        "--js" : "build/javascript/unit.js"
+      }
     },
     "test"  : {
       "-cp" : "src/test/haxe",

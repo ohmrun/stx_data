@@ -10,14 +10,14 @@ package stx.data.store.block_chain;
   }
   @:noUsing static public function pure<K>(entry:Entry<K>){
     var arr   = ArrayOfEntry.pure(entry);
-    var hash  = Helper.hash(arr);
+    var hash  = Hash.pure(arr);
     return make(Some(hash),arr);
   }
   public function mod(fn:ArrayOfEntry<K>->ArrayOfEntry<K>):HashedArrayOfEntry<K>{
     return make(this.fst(),fn(this.snd()));
   }
   public function rehash(){
-    return make(Helper.hash(this.snd()),this.snd());
+    return make(Hash.pure(this.snd()),this.snd());
   }
   public var hash(get,never):Option<Hash>;
   private function get_hash():Option<Hash>{

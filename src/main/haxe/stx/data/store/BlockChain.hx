@@ -9,9 +9,11 @@ class BlockChain<K,V>{
   static public function Memory<K,V>(deps):BlockChain<K,V>{
     return new MemoryBlockChain(deps);
   }
+  #if (sys || nodejs)
   static public function FileSystem<K,V>(deps,device,directory):BlockChain<K,V>{
-    return new FileSystemBlockChain(deps,device,directory);
+    return new stx.asys.store.block_chain.term.FileSystemBlockChain(deps,device,directory);
   }
+  #end
   public var deps(default,null):BlockChainDeps<K,V>;
   
   public var head(default,null):SettableStoreApi<String,Hash>;

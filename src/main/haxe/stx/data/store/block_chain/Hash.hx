@@ -11,4 +11,7 @@ package stx.data.store.block_chain;
   public function truncate(int){
     return Chars.lift(this).truncate(int);
   }
+  @:noUsing static public function pure<T:HasHashable>(v:T):Hash{
+    return new Hash(Sha1.encode(Serialize.encode(v.hashable())));
+  }
 }

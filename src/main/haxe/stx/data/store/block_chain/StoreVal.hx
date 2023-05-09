@@ -25,7 +25,7 @@ abstract StoreVal<K,V>(StoreValSum<K,V>) from StoreValSum<K,V> to StoreValSum<K,
 }
 class StoreValLift{
   static public function identify<K,V>(self:StoreValSum<K,V>){
-    return HashedStoreVal.make(Helper.hash(StoreVal.lift(self)),self);
+    return HashedStoreVal.make(Hash.pure(StoreVal.lift(self)),self);
   }
   static public function fold<K,V,Z>(self:StoreVal<K,V>,ndata:V->Z,nedge:K->Z):Z{
     return switch(self){

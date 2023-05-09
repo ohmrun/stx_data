@@ -1,9 +1,13 @@
-package stx.data.store.block_chain.term;
+package stx.asys.store.block_chain.term;
 
-using stx.fs.Path;
+
+#if (sys || nodejs)
+using stx.asys.fs.Path;
 using stx.asys.Device;
+#end
 
-import stx.data.store.settable_store.SyncFileSystemSettableStoreOfString;
+#if (sys || nodejs)
+import stx.asys.store.settable_store.SyncFileSystemSettableStoreOfString;
 
 class FileSystemBlockChain<K,V> extends BlockChain<K,V>{
   public var device(default,null):Device;
@@ -16,10 +20,10 @@ class FileSystemBlockChain<K,V> extends BlockChain<K,V>{
     var head       = new SyncFileSystemSettableStoreOfString({
       V : {
         serialize   : (hash:Hash)   -> {
-          return Serialize.encode(hash.prj());
+          return Serialize.encode(@:privateAccess hash.prj());
         },
         unserialize : (str:String)  -> {
-          return new Hash(Serialize.decode(str));
+          return @:privateAccess new Hash(Serialize.decode(str));
         },
         hash        : (hash:Hash)   -> hash
       }
@@ -50,10 +54,11 @@ class FileSystemBlockChain<K,V> extends BlockChain<K,V>{
           );
           return (make:ArrayOfEntry<K>);
         },
-        hash        : (v:ArrayOfEntry<K>)               -> Helper.hash(v)
+        hash        : (v:ArrayOfEntry<K>)               -> Hash.pure(v)
       }
     },device,directory.down("refs"));
 
     super(deps,head,data,refs);
   }
 }
+#end

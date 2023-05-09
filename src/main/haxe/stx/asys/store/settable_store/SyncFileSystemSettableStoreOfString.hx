@@ -1,12 +1,17 @@
-package stx.data.store.settable_store;
+package stx.asys.store.settable_store;
 
-using stx.fs.Path;
-
+#if (sys || nodejs)
 import sys.io.File;
-import sys.FileSystem;
 import stx.asys.Device;
+using stx.asys.fs.Path;
+import sys.FileSystem;
+#end
+
+
+
 import stx.data.store.block_chain.Hash;
 
+#if (sys || nodejs)
 class SyncFileSystemSettableStoreOfString<V> implements stx.data.store.SettableStoreApi<String,V>{
 
   public var deps(default,null):{
@@ -57,3 +62,4 @@ class SyncFileSystemSettableStoreOfString<V> implements stx.data.store.SettableS
     return Produce.pure(paths);
   }
 }
+#end
