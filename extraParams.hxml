@@ -1,1 +1,0 @@
---macro #if (js && !nodejs) exclude("stx.asys",true) #end

@@ -14,6 +14,9 @@
       ],
       "javascript" : {
         "--js" : "build/javascript/unit.js"
+      },
+      "interp" : {
+        "--interp" : true
       }
     },
     "test"  : {

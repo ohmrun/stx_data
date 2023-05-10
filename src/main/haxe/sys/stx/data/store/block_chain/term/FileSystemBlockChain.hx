@@ -1,16 +1,15 @@
-package stx.asys.store.block_chain.term;
+package sys.stx.data.store.block_chain.term;
 
 
 #if (sys || nodejs)
-using stx.asys.fs.Path;
-using stx.asys.Device;
+using stx.fs.Path;
 #end
 
 #if (sys || nodejs)
-import stx.asys.store.settable_store.SyncFileSystemSettableStoreOfString;
+import sys.stx.data.store.settable_store.SyncFileSystemSettableStoreOfString;
 
 class FileSystemBlockChain<K,V> extends BlockChain<K,V>{
-  public var device(default,null):Device;
+  public var device(default,null):DeviceApi;
   public var directory(default,null):Directory;
 
   public function new(deps:BlockChainDeps<K,V>,device,directory){

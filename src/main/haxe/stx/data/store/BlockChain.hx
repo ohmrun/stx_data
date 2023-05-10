@@ -11,7 +11,7 @@ class BlockChain<K,V>{
   }
   #if (sys || nodejs)
   static public function FileSystem<K,V>(deps,device,directory):BlockChain<K,V>{
-    return new stx.asys.store.block_chain.term.FileSystemBlockChain(deps,device,directory);
+    return new sys.stx.data.store.block_chain.term.FileSystemBlockChain(deps,device,directory);
   }
   #end
   public var deps(default,null):BlockChainDeps<K,V>;

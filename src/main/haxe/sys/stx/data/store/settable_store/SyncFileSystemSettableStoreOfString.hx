@@ -1,9 +1,9 @@
-package stx.asys.store.settable_store;
+package sys.stx.data.store.settable_store;
 
 #if (sys || nodejs)
 import sys.io.File;
-import stx.asys.Device;
-using stx.asys.fs.Path;
+import stx.asys.DeviceApi;
+using stx.fs.Path;
 import sys.FileSystem;
 #end
 
@@ -21,7 +21,7 @@ class SyncFileSystemSettableStoreOfString<V> implements stx.data.store.SettableS
       hash        : V -> Hash
     }
   };
-  public var device(default,null):Device;
+  public var device(default,null):DeviceApi;
   public var directory(default,null):Directory;
 
   public function new(deps,device,directory){
