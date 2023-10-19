@@ -9,10 +9,6 @@ typedef MemorySettableStoreOfString<V>          = stx.data.store.settable_store.
 
 typedef AbsoluteStoreApi<K,V>                   = stx.data.store.AbsoluteStoreApi<K,V>;
 
-typedef ArrayOfEntry<K>                         = stx.data.store.block_chain.ArrayOfEntry<K>;
-typedef BlockChain<K,V>                         = stx.data.store.BlockChain<K,V>;
-typedef Articulation<K>                         = stx.data.store.block_chain.Articulation<K>;
-typedef BlockChainDeps<K,V>                     = stx.data.store.block_chain.BlockChainDeps<K,V>;
 
 enum Step{
   Ind(index:Blob);
