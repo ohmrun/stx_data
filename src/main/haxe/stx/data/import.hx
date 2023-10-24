@@ -5,7 +5,7 @@ import haxe.crypto.Sha1;
 
 using tink.CoreApi;
 
-using stx.fail.DbFailure;
+using stx.fail.DataFailure;
 
 using stx.Pico;
 using stx.Nano;

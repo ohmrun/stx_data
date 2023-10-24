@@ -35,13 +35,13 @@ class BlockChain<K,V>{
     this.refs                 = refs;
     
   }
-  private function get_master():Propose<Hash,DbFailure>{
+  private function get_master():Propose<Hash,DataFailure>{
     var out = this.head.get("master").map(
       ((x:Hash) -> {}).fn().promote()
     );
     return out;
   }
-  private function get_refs(?hash:Hash):Propose<ArrayOfEntry<K>,DbFailure>{
+  private function get_refs(?hash:Hash):Propose<ArrayOfEntry<K>,DataFailure>{
     return 
         Propose.make(hash)
         .or(()->get_master())
@@ -59,7 +59,7 @@ class BlockChain<K,V>{
           (x) -> {__.log().debug(_ -> _.pure(x.map(_ -> _.toString())));}
         );
   }
-  private function obtain(k:Articulation<K>):Propose<Array<Option<HashedArrayOfEntry<K>>>,DbFailure>{
+  private function obtain(k:Articulation<K>):Propose<Array<Option<HashedArrayOfEntry<K>>>,DataFailure>{
     ///trace('OBTAIN ${k.length}');
     return get_refs().materialise().and(get_master().materialise()).convert(
       (couple:Couple<Option<ArrayOfEntry<K>>,Option<Hash>>)-> {
@@ -88,7 +88,7 @@ class BlockChain<K,V>{
         },
         k,
         seed
-      ).defv(Propose.pure([]))
+      )
     );
   }
   /**
@@ -103,7 +103,7 @@ class BlockChain<K,V>{
     m = ['b',[j,hash(l)]]
     n = ['a',[hash(m)]]
   **/
-  public function set(k:Articulation<K>,v:V):Execute<DbFailure>{
+  public function set(k:Articulation<K>,v:V):Execute<DataFailure>{
     //trace("!!!!!!!!!!!!!!SET!!!!!!!!!!!!!!!!");
     var vhash       = Global.hash(v);
     //trace('vhash: $vhash');
@@ -171,7 +171,7 @@ class BlockChain<K,V>{
       )
     );
   } 
-  public function get(k:Articulation<K>):Propose<V,DbFailure>{
+  public function get(k:Articulation<K>):Propose<V,DataFailure>{
     //trace('???????????$k?????????????');
     return obtain(k).flat_map(
       (ls) -> {
@@ -186,11 +186,11 @@ class BlockChain<K,V>{
       }
     );
   }
-  public function has(k:Articulation<K>):Produce<Bool,DbFailure>{
+  public function has(k:Articulation<K>):Produce<Bool,DataFailure>{
     return null;
   }
   @:note("seems a bit heavy")
-  public function itr():Produce<Array<Articulation<K>>,DbFailure>{
+  public function itr():Produce<Cluster<Articulation<K>>,DataFailure>{
     return Produce.fromRefuse(__.fault().of(E_Db_Unimplemented));
   }
 }

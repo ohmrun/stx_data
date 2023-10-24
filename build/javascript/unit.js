@@ -22335,7 +22335,7 @@ stx_data_store_BlockChain.prototype = {
 	}
 	,itr: function() {
 		var this1 = stx_nano_lift_LiftNano.fault(stx_nano_Wildcard.__,{ fileName : "stx/data/store/BlockChain.hx", lineNumber : 194, className : "stx.data.store.BlockChain", methodName : "itr"});
-		return eu_ohmrun_fletcher_Produce.fromRefuse(stx_fail_Refuse.make(stx_nano_lift_LiftNano.option(stx_nano_Wildcard.__,stx_fail_DeclineSum.EXTERNAL(stx_fail_DbFailure.E_Db_Unimplemented)),haxe_ds_Option.None,stx_pico_Option.fromNullT(this1)));
+		return eu_ohmrun_fletcher_Produce.fromRefuse(stx_fail_Refuse.make(stx_nano_lift_LiftNano.option(stx_nano_Wildcard.__,stx_fail_DeclineSum.EXTERNAL(stx_fail_DataFailure.E_Db_Unimplemented)),haxe_ds_Option.None,stx_pico_Option.fromNullT(this1)));
 	}
 	,__class__: stx_data_store_BlockChain
 };
@@ -26222,10 +26222,10 @@ var stx_fail_AssertFailure = $hxEnums["stx.fail.AssertFailure"] = { __ename__:"s
 	,PredicateFailed: ($_=function(type,valueN,value0) { return {_hx_index:0,type:type,valueN:valueN,value0:value0,__enum__:"stx.fail.AssertFailure",toString:$estr}; },$_._hx_name="PredicateFailed",$_.__params__ = ["type","valueN","value0"],$_)
 };
 stx_fail_AssertFailure.__constructs__ = [stx_fail_AssertFailure.PredicateFailed];
-var stx_fail_DbFailure = $hxEnums["stx.fail.DbFailure"] = { __ename__:"stx.fail.DbFailure",__constructs__:null
-	,E_Db_Unimplemented: {_hx_name:"E_Db_Unimplemented",_hx_index:0,__enum__:"stx.fail.DbFailure",toString:$estr}
+var stx_fail_DataFailure = $hxEnums["stx.fail.DataFailure"] = { __ename__:"stx.fail.DataFailure",__constructs__:null
+	,E_Db_Unimplemented: {_hx_name:"E_Db_Unimplemented",_hx_index:0,__enum__:"stx.fail.DataFailure",toString:$estr}
 };
-stx_fail_DbFailure.__constructs__ = [stx_fail_DbFailure.E_Db_Unimplemented];
+stx_fail_DataFailure.__constructs__ = [stx_fail_DataFailure.E_Db_Unimplemented];
 var stx_fail_DeclineSum = $hxEnums["stx.fail.DeclineSum"] = { __ename__:"stx.fail.DeclineSum",__constructs__:null
 	,INTERNAL: ($_=function(digest) { return {_hx_index:0,digest:digest,__enum__:"stx.fail.DeclineSum",toString:$estr}; },$_._hx_name="INTERNAL",$_.__params__ = ["digest"],$_)
 	,EXTERNAL: ($_=function(v) { return {_hx_index:1,v:v,__enum__:"stx.fail.DeclineSum",toString:$estr}; },$_._hx_name="EXTERNAL",$_.__params__ = ["v"],$_)

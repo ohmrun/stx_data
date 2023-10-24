@@ -133,9 +133,9 @@ interface TableEditApi{
 	/**
 		-1 means after the end of the list.
 	**/
-	public function insert(before:Int = -1,data:ReadRow):Execute<DbFailure>;
-	public function update(index:Int,data:ReadRow):Execute<DbFailure>;
-	public function delete(index:Int):Execute<DbFailure>;
+	public function insert(before:Int = -1,data:ReadRow):Execute<DataFailure>;
+	public function update(index:Int,data:ReadRow):Execute<DataFailure>;
+	public function delete(index:Int):Execute<DataFailure>;
 }
 typedef TableSchemataDef = Array<TableDataType>;
 abstract TableSchemata(TableSchemataDef) from TableSchemataDef to TableSchemataDef{

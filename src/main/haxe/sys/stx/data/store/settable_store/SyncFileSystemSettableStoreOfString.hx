@@ -34,14 +34,14 @@ class SyncFileSystemSettableStoreOfString<V> implements stx.data.store.SettableS
       FileSystem.createDirectory(path);
     }
   }
-  public function set(k:String,v:V):Execute<DbFailure>{
+  public function set(k:String,v:V):Execute<DataFailure>{
     //trace('SET $k $v');
     var data      = deps.V.serialize(v);
     var path      = this.directory.entry(k).canonical(this.device.sep);
     File.saveContent(path,data);
     return Execute.unit();
   }
-  public function get(k:String):Propose<V,DbFailure>{
+  public function get(k:String):Propose<V,DataFailure>{
     var path          = this.directory.entry(k).canonical(this.device.sep);
     return if(!FileSystem.exists(path)){
       Propose.fromChunk(Tap);
@@ -53,13 +53,18 @@ class SyncFileSystemSettableStoreOfString<V> implements stx.data.store.SettableS
       Propose.pure(reconstructed);
     } 
   }
-  public function has(k:String):Produce<Bool,DbFailure>{
+  public function has(k:String):Produce<Bool,DataFailure>{
     var out = FileSystem.exists(this.directory.entry(k).canonical(this.device.sep));
     return Produce.pure(out);
   }
-  public function itr():Produce<Array<String>,DbFailure>{
+  public function itr():Produce<Cluster<String>,DataFailure>{
     var paths = FileSystem.readDirectory(this.directory.canonical(this.device.sep));
     return Produce.pure(paths);
+  }
+  public function del(k:String){
+    var path      = this.directory.entry(k).canonical(this.device.sep);
+    sys.FileSystem.deleteFile(path);
+    return Execute.unit();
   }
 }
 #end
